@@ -6,7 +6,7 @@
   import GradeCell from './GradeCell.svelte';
 
   // Modules of one semester. Grades are edited inline (saved when the field loses focus / Enter);
-  // in readonly mode (administrator inspection) every control is replaced by plain text.
+  // in readonly mode every control is replaced by plain text.
   let {
     modules, formulas = [], readonly = false, revision = 0,
     ongrades, onformula, onedit, ondelete, onmove, oninvalid,

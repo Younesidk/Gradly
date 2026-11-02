@@ -772,7 +772,7 @@ func TestCannotDisableSelfOrAdmins(t *testing.T) {
 	expect(t, admin.post("/api/admin/users/does-not-exist/disabled", map[string]any{"disabled": true}), 404)
 }
 
-func TestAdminCanInspectUsersReadOnly(t *testing.T) {
+func TestAdminCannotSeeOtherUsersGrades(t *testing.T) {
 	e := newEnv(t)
 	admin := e.adminClient()
 	stud := e.student(admin, "inspected")
@@ -782,14 +782,12 @@ func TestAdminCanInspectUsersReadOnly(t *testing.T) {
 	var u models.User
 	e.app.DB.First(&u, "normalized_user_name = ?", "INSPECTED")
 	detail := expect(t, admin.get("/api/admin/users/"+u.ID), 200).json()
-	if len(detail["semesters"].([]any)) != 1 || num(detail["row"].(map[string]any)["modules"]) != 1 {
+	if _, leaked := detail["semesters"]; leaked || num(detail["row"].(map[string]any)["modules"]) != 1 {
 		t.Errorf("detail: %v", detail)
 	}
-	one := expect(t, admin.get("/api/admin/users/"+u.ID+"/semesters/"+sem), 200).json()
-	if one["view"].(map[string]any)["semester"].(map[string]any)["name"] != "Their semester" {
-		t.Errorf("semester view: %v", one)
-	}
-	expect(t, admin.get("/api/admin/users/"+u.ID+"/semesters/nope"), 404)
+	expect(t, admin.get("/api/admin/users/"+u.ID+"/semesters/"+sem), 404)
+	// The owner-scoped routes never resolve another user's semester either.
+	expect(t, admin.get("/api/semesters/"+sem), 404)
 	expect(t, admin.get("/api/admin/users/nope"), 404)
 }
 
