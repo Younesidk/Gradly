@@ -175,7 +175,6 @@ func (a *App) Router() *gin.Engine {
 	admin.PUT("/default-lab-formula", a.adminSetDefaultLabFormula)
 	admin.GET("/users", a.adminUsers)
 	admin.GET("/users/:id", a.adminUser)
-	admin.GET("/users/:id/semesters/:sid", a.adminUserSemester)
 	admin.POST("/users/:id/disabled", a.adminSetDisabled)
 	admin.GET("/invitations", a.listInvitations)
 	admin.POST("/invitations", a.createInvitation)

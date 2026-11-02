@@ -7,7 +7,6 @@
   import Loading from '../components/Loading.svelte';
   import EmptyState from '../components/EmptyState.svelte';
   import AdminBanner from '../components/AdminBanner.svelte';
-  import SemesterCard from '../components/SemesterCard.svelte';
 
   let { params } = $props();
   let detail = $state(null);
@@ -91,14 +90,4 @@
     </dl>
   </section>
 
-  <div class="section-title"><h2>Academic records</h2></div>
-  {#if detail.semesters.length === 0}
-    <EmptyState icon="semesters" title="No semesters" text="This user hasn't created any semesters yet." />
-  {:else}
-    <div class="card-grid">
-      {#each detail.semesters as s (s.semester.id)}
-        <SemesterCard view={s} href="/admin/users/{u.id}/semesters/{s.semester.id}" />
-      {/each}
-    </div>
-  {/if}
 {/if}

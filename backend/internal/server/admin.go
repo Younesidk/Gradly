@@ -148,39 +148,11 @@ func (a *App) adminUser(c *gin.Context) {
 	a.DB.Model(&models.Formula{}).Where("user_id = ?", u.ID).Count(&formulas)
 	a.DB.Model(&models.Invitation{}).
 		Where("normalized_email = ? AND redeemed_at IS NULL AND revoked_at IS NULL AND expires_at > ?", u.NormalizedEmail, a.now()).Count(&pending)
-	// Read-only inspection of another user's academic data (administrators only).
-	semesters, err := a.loadSemesters(u.ID, "")
-	if err != nil {
-		fail(c, err)
-		return
-	}
+	// Semesters and grades are private to their owner: administrators only see counts.
 	c.JSON(http.StatusOK, gin.H{
 		"row": a.userRows([]models.User{u}, report)[0], "lastLoginAt": u.LastLoginAt, "disabledAt": u.DisabledAt,
-		"formulas": formulas, "pendingInvitationsForEmail": pending, "semesters": semesters,
+		"formulas": formulas, "pendingInvitationsForEmail": pending,
 	})
-}
-
-func (a *App) adminUserSemester(c *gin.Context) {
-	var u models.User
-	if err := a.DB.First(&u, "id = ?", c.Param("id")).Error; err != nil {
-		fail(c, notFound("That user"))
-		return
-	}
-	semesters, err := a.loadSemesters(u.ID, c.Param("sid"))
-	if err != nil {
-		fail(c, err)
-		return
-	}
-	if len(semesters) == 0 {
-		fail(c, notFound("That semester"))
-		return
-	}
-	report, err := a.storage.get(a, false)
-	if err != nil {
-		fail(c, err)
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"user": a.userRows([]models.User{u}, report)[0], "view": semesters[0]})
 }
 
 func (a *App) adminSetDisabled(c *gin.Context) {

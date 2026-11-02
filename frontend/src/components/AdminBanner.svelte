@@ -4,5 +4,5 @@
 
 <div class="admin-banner" role="note">
   <strong>Administrator view.</strong>
-  You are looking at <strong>{userName}</strong>'s data in read-only mode. Nothing here can be edited.
+  You are looking at <strong>{userName}</strong>'s account. Their semesters and grades are private and aren't shown to administrators.
 </div>

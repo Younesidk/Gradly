@@ -23,7 +23,6 @@
   import AdminOverview from './pages/AdminOverview.svelte';
   import AdminUsers from './pages/AdminUsers.svelte';
   import AdminUserDetail from './pages/AdminUserDetail.svelte';
-  import AdminUserSemester from './pages/AdminUserSemester.svelte';
   import AdminInvitations from './pages/AdminInvitations.svelte';
 
   // layout: 'auth' pages are public and centred; 'app' pages need a signed-in user; 'consent' pages are centred but
@@ -42,7 +41,6 @@
     { path: '/admin', page: AdminOverview, layout: 'app', admin: true },
     { path: '/admin/users', page: AdminUsers, layout: 'app', admin: true },
     { path: '/admin/users/:id', page: AdminUserDetail, layout: 'app', admin: true },
-    { path: '/admin/users/:id/semesters/:sid', page: AdminUserSemester, layout: 'app', admin: true },
     { path: '/admin/invitations', page: AdminInvitations, layout: 'app', admin: true },
   ];
 
